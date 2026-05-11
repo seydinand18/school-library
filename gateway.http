@@ -1,0 +1,152 @@
+### ======================
+### MEMBRES
+### ======================
+
+### Liste tous les membres
+GET http://localhost:8080/membres
+Accept: application/json
+
+###
+
+### Détail d'un membre
+GET http://localhost:8080/membres/1
+Accept: application/json
+
+###
+
+### Créer un membre
+POST http://localhost:8080/membres
+Content-Type: application/json
+
+{
+  "nom": "Sarr",
+  "prenom": "Cheikh",
+  "email": "cheikh.sarr@ecole.sn",
+  "role": "ELEVE",
+  "quota": 3
+}
+
+###
+
+### Modifier un membre
+PUT http://localhost:8080/membres/1
+Content-Type: application/json
+
+{
+  "nom": "Diallo",
+  "prenom": "Mamadou",
+  "email": "mamadou.diallo@ecole.sn",
+  "role": "ELEVE",
+  "quota": 5
+}
+
+###
+
+### Supprimer un membre
+DELETE http://localhost:8080/membres/6
+
+###
+
+### Emprunts d'un membre (Feign → emprunts-svc)
+GET http://localhost:8080/membres/1/emprunts
+
+###
+
+### ======================
+### LIVRES
+### ======================
+
+### Liste tous les livres
+GET http://localhost:8080/livres
+Accept: application/json
+
+###
+
+### Détail d'un livre
+GET http://localhost:8080/livres/1
+Accept: application/json
+
+###
+
+### Créer un livre
+POST http://localhost:8080/livres
+Content-Type: application/json
+
+{
+  "titre": "Les Bouts de bois de Dieu",
+  "auteur": "Ousmane Sembène",
+  "isbn": "978-2-07-036900-3",
+  "genre": "Roman",
+  "classeScolaire": "Terminale",
+  "quantiteTotale": 3,
+  "quantiteDisponible": 3
+}
+
+###
+
+### Modifier un livre
+PUT http://localhost:8080/livres/1
+Content-Type: application/json
+
+{
+  "titre": "Le Monde s'effondre",
+  "auteur": "Chinua Achebe",
+  "isbn": "978-2-07-036822-8",
+  "genre": "Roman",
+  "classeScolaire": "Terminale",
+  "quantiteTotale": 3,
+  "quantiteDisponible": 2
+}
+
+###
+
+### Supprimer un livre
+DELETE http://localhost:8080/livres/4
+
+###
+
+### Emprunter un livre (décrémente quantiteDisponible)
+PUT http://localhost:8080/livres/1/emprunter
+
+###
+
+### Retourner un livre (incrémente quantiteDisponible)
+PUT http://localhost:8080/livres/1/retourner
+
+###
+
+### ======================
+### EMPRUNTS
+### ======================
+
+### Liste tous les emprunts
+GET http://localhost:8080/emprunts
+Accept: application/json
+
+###
+
+### Détail d'un emprunt
+GET http://localhost:8080/emprunts/1
+Accept: application/json
+
+###
+
+### Emprunts d'un membre
+GET http://localhost:8080/emprunts/membre/1
+Accept: application/json
+
+###
+
+### Créer un emprunt (teste le Feign vers membres-svc et livres-svc)
+POST http://localhost:8080/emprunts
+Content-Type: application/json
+
+{
+  "membreId": 1,
+  "livreId": 1
+}
+
+###
+
+### Retourner un livre (teste le Feign vers livres-svc)
+PATCH http://localhost:8080/emprunts/1/retour
