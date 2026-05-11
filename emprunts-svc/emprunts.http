@@ -1,0 +1,31 @@
+### Liste tous les emprunts
+GET http://localhost:8083/emprunts
+Accept: application/json
+
+###
+
+### Détail d'un emprunt
+GET http://localhost:8083/emprunts/1
+Accept: application/json
+
+###
+
+### Emprunts d'un membre
+GET http://localhost:8083/emprunts/membre/1
+Accept: application/json
+
+###
+
+### Créer un emprunt
+POST http://localhost:8083/emprunts
+Content-Type: application/json
+
+{
+  "membreId": 1,
+  "livreId": 2
+}
+
+###
+
+### Retourner un livre
+PATCH http://localhost:8083/emprunts/1/retour
