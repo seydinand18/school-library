@@ -1,0 +1,76 @@
+<p-toast />
+
+<div class="page-hero">
+  <div style="max-width:700px; margin:0 auto;">
+    <a routerLink="/livres" style="display:inline-flex; align-items:center; gap:0.4rem; color:rgba(255,255,255,0.7); font-size:0.8rem; text-decoration:none; margin-bottom:1.25rem;">
+      <i class="pi pi-arrow-left"></i> Retour au catalogue
+    </a>
+    <h1 style="color:white; font-size:1.5rem; font-weight:700; margin:0;">
+      {{ isEdit() ? 'Modifier le livre' : 'Ajouter un livre' }}
+    </h1>
+  </div>
+</div>
+
+<div class="page-content narrow">
+  <div class="card">
+    <div class="card-header">
+      <h2 style="font-size:0.95rem; font-weight:600; color:#1e293b; margin:0;">Informations du livre</h2>
+    </div>
+    <form (ngSubmit)="sauvegarder()" class="card-body" style="display:flex; flex-direction:column; gap:1.25rem;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+
+        <div style="grid-column:1/-1; display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Titre *</label>
+          <input pInputText [(ngModel)]="livre.titre" name="titre" required
+                 placeholder="Ex: Le Monde s'effondre" class="w-full" />
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Auteur *</label>
+          <input pInputText [(ngModel)]="livre.auteur" name="auteur" required
+                 placeholder="Nom de l'auteur" class="w-full" />
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">ISBN *</label>
+          <input pInputText [(ngModel)]="livre.isbn" name="isbn" required
+                 placeholder="978-xxx-xxx" class="w-full" />
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Genre</label>
+          <input pInputText [(ngModel)]="livre.genre" name="genre"
+                 placeholder="Roman, Poésie..." class="w-full" />
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Classe scolaire</label>
+          <input pInputText [(ngModel)]="livre.classeScolaire" name="classeScolaire"
+                 placeholder="6ème, 3ème..." class="w-full" />
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Quantité totale *</label>
+          <p-inputnumber [(ngModel)]="livre.quantiteTotale" name="quantiteTotale"
+                         [min]="1" [showButtons]="true" class="w-full" />
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Quantité disponible *</label>
+          <p-inputnumber [(ngModel)]="livre.quantiteDisponible" name="quantiteDisponible"
+                         [min]="0" [showButtons]="true" class="w-full" />
+        </div>
+      </div>
+
+      <div style="display:flex; gap:0.75rem; padding-top:1rem; border-top:1px solid #f1f5f9;">
+        <div style="flex:1;">
+          <p-button type="submit" [label]="isEdit() ? 'Enregistrer' : 'Ajouter le livre'"
+                    icon="pi pi-save" [loading]="saving()" styleClass="w-full" />
+        </div>
+        <a routerLink="/livres" style="text-decoration:none;">
+          <p-button label="Annuler" severity="secondary" icon="pi pi-times" />
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="page-hero">
+  <div style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <h1 style="color:white; font-size:1.4rem; font-weight:700; margin:0;">Catalogue des livres</h1>
+      <p style="color:rgba(255,255,255,0.65); margin:0.2rem 0 0; font-size:0.8rem;">{{ livresFiltres().length }} livre(s)</p>
+    </div>
+    <a routerLink="/livres/new" style="text-decoration:none;">
+      <p-button label="Ajouter un livre" icon="pi pi-plus" [rounded]="true" severity="contrast" />
+    </a>
+  </div>
+</div>
+
+<div class="page-content">
+  <div class="card">
+    <!-- Barre de recherche -->
+    <div style="padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:0.75rem;">
+      <i class="pi pi-search" style="color:#94a3b8;"></i>
+      <input pInputText [(ngModel)]="recherche" placeholder="Rechercher titre, auteur, ISBN..."
+        (input)="filtrer()"
+        style="border:none; outline:none; flex:1; font-size:0.875rem; background:transparent;" />
+      @if (recherche) {
+        <p-button icon="pi pi-times" [text]="true" [rounded]="true" severity="secondary" size="small"
+          (onClick)="recherche=''; filtrer()" />
+      }
+    </div>
+
+    <p-table [value]="livresFiltres()" [paginator]="true" [rows]="10"
+             [rowsPerPageOptions]="[10,25,50]" styleClass="p-datatable-sm p-datatable-striped"
+             sortField="titre" [sortOrder]="1">
+      <ng-template pTemplate="header">
+        <tr class="table-header">
+          <th pSortableColumn="titre">Titre <p-sortIcon field="titre" /></th>
+          <th pSortableColumn="auteur">Auteur <p-sortIcon field="auteur" /></th>
+          <th>Genre / Classe</th>
+          <th pSortableColumn="quantiteDisponible">Disponibilité <p-sortIcon field="quantiteDisponible" /></th>
+          <th style="text-align:right;">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-livre>
+        <tr class="table-row">
+          <td>
+            <div style="font-weight:600; color:#1e293b;">{{ livre.titre }}</div>
+            <div style="color:#94a3b8; font-size:0.75rem;">{{ livre.isbn }}</div>
+          </td>
+          <td style="color:#475569;">{{ livre.auteur }}</td>
+          <td>
+            <div style="font-size:0.8rem; color:#475569;">{{ livre.genre || '—' }}</div>
+            <div style="font-size:0.75rem; color:#94a3b8;">{{ livre.classeScolaire || '' }}</div>
+          </td>
+          <td>
+            <p-tag [value]="livre.quantiteDisponible + ' / ' + livre.quantiteTotale"
+                   [severity]="disponibiliteTag(livre)" />
+          </td>
+          <td style="text-align:right;">
+            <div style="display:flex; justify-content:flex-end; gap:0.25rem;">
+              <a [routerLink]="['/livres', livre.id, 'edit']">
+                <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" size="small" />
+              </a>
+              <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" size="small"
+                        (onClick)="confirmerSuppression(livre)" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" style="padding:3rem; text-align:center; color:#94a3b8;">
+            <i class="pi pi-inbox" style="font-size:2.5rem; display:block; margin-bottom:0.75rem;"></i>
+            Aucun livre trouvé
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

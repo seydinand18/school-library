@@ -1,0 +1,68 @@
+@if (membre()) {
+  <div class="page-hero">
+    <div style="max-width:1000px; margin:0 auto;">
+      <a routerLink="/membres" style="display:inline-flex; align-items:center; gap:0.4rem; color:rgba(255,255,255,0.7); font-size:0.8rem; text-decoration:none; margin-bottom:1.25rem;">
+        <i class="pi pi-arrow-left"></i> Retour
+      </a>
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <div style="display:flex; align-items:center; gap:1rem;">
+          <p-avatar [label]="avatarLabel(membre()!)" shape="circle" size="xlarge"
+                    style="background:rgba(255,255,255,0.25); color:white; font-weight:700;" />
+          <div>
+            <h1 style="color:white; font-size:1.4rem; font-weight:700; margin:0;">{{ membre()!.prenom }} {{ membre()!.nom }}</h1>
+            <p style="color:rgba(255,255,255,0.65); margin:0.25rem 0 0; font-size:0.875rem;">{{ membre()!.email }}</p>
+          </div>
+        </div>
+        <a [routerLink]="['/membres', membre()!.id, 'edit']" style="text-decoration:none;">
+          <p-button label="Modifier" icon="pi pi-pencil" severity="contrast" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="page-content" style="max-width:1000px;">
+    <!-- Stat cards -->
+    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:1rem; margin-bottom:1.25rem;">
+      <div class="card" style="padding:1.25rem 1.5rem; border-radius:0.875rem;">
+        <div style="font-size:0.7rem; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">Rôle</div>
+        <p-tag [value]="membre()!.role" [severity]="membre()!.role === 'PROFESSEUR' ? 'secondary' : 'success'" />
+      </div>
+      <div class="card" style="padding:1.25rem 1.5rem; border-radius:0.875rem;">
+        <div style="font-size:0.7rem; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">Quota</div>
+        <div style="font-size:1.1rem; font-weight:700; color:#1e293b;">{{ membre()!.quota }} livre(s)</div>
+      </div>
+      <div class="card" style="padding:1.25rem 1.5rem; border-radius:0.875rem;">
+        <div style="font-size:0.7rem; font-weight:600; color:#94a3b8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">Emprunts total</div>
+        <div style="font-size:1.1rem; font-weight:700; color:#1e293b;">{{ emprunts().length }}</div>
+      </div>
+    </div>
+
+    <!-- Historique -->
+    <div class="card">
+      <div class="card-header">
+        <h2 style="font-size:0.95rem; font-weight:600; color:#1e293b; margin:0;">Historique des emprunts</h2>
+      </div>
+      <p-table [value]="emprunts()" [paginator]="true" [rows]="5" styleClass="p-datatable-sm">
+        <ng-template pTemplate="header">
+          <tr class="table-header">
+            <th>Livre</th>
+            <th>Date emprunt</th>
+            <th>Retour prévu</th>
+            <th>Statut</th>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-e>
+          <tr class="table-row">
+            <td style="font-weight:500; color:#1e293b; font-size:0.875rem;">{{ e.livre?.titre || 'Livre #' + e.livreId }}</td>
+            <td style="color:#64748b; font-size:0.875rem;">{{ e.dateEmprunt }}</td>
+            <td style="color:#64748b; font-size:0.875rem;">{{ e.dateRetourPrevue }}</td>
+            <td><p-tag [value]="e.statut" [severity]="statutSeverity(e.statut)" /></td>
+          </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+          <tr><td colspan="4" style="padding:2.5rem; text-align:center; color:#94a3b8; font-size:0.875rem;">Aucun emprunt</td></tr>
+        </ng-template>
+      </p-table>
+    </div>
+  </div>
+}

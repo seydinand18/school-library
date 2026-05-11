@@ -1,0 +1,46 @@
+@import "primeicons/primeicons.css";
+@import "tailwindcss/theme" layer(theme);
+@import "tailwindcss/utilities" layer(utilities);
+
+body { background: #f1f5f9; font-family: ui-sans-serif, system-ui, sans-serif; }
+
+/* Navbar links */
+.nav-item {
+  display: flex; align-items: center; gap: 0.4rem;
+  padding: 0.4rem 0.875rem; border-radius: 7px;
+  font-size: 0.875rem; font-weight: 500;
+  color: rgba(255,255,255,0.72); text-decoration: none;
+  transition: all 0.15s ease;
+}
+.nav-item:hover { background: rgba(255,255,255,0.15); color: white; }
+.nav-item.nav-active { background: rgba(255,255,255,0.2); color: white; font-weight: 600; }
+.nav-item i { font-size: 0.95rem; }
+
+/* Statut badges */
+.badge { display:inline-block; padding:0.2rem 0.65rem; border-radius:9999px; font-size:0.72rem; font-weight:600; }
+.badge-en-cours  { background:#dbeafe; color:#1d4ed8; }
+.badge-retourne  { background:#dcfce7; color:#15803d; }
+.badge-en-retard { background:#fee2e2; color:#dc2626; }
+
+/* Page layout helpers */
+.page-hero { padding: 1.25rem 2rem 3.5rem; background: linear-gradient(135deg,#1e3a8a 0%,#1d4ed8 100%); }
+
+.page-content { max-width:1280px; margin:-3rem auto 2rem; padding:0 2rem; }
+.page-content.narrow { max-width:700px; }
+
+.card { background:white; border-radius:1rem; box-shadow:0 4px 24px rgba(0,0,0,0.07); overflow:hidden; }
+.card-header { padding:1.25rem 1.5rem; border-bottom:1px solid #f1f5f9; }
+.card-body { padding:1.5rem; }
+
+.table-header th { padding:0.875rem 1.25rem; font-size:0.72rem; font-weight:600; color:#64748b; text-transform:uppercase; letter-spacing:0.05em; background:#f8fafc; }
+.table-row td { padding:0.9rem 1.25rem; border-bottom:1px solid #f8fafc; }
+.table-row:hover td { background:#f8fafc; }
+
+/* Markdown rendu dans les messages bot */
+.bot-msg p { margin: 0 0 0.5rem; }
+.bot-msg p:last-child { margin-bottom: 0; }
+.bot-msg ul, .bot-msg ol { margin: 0.25rem 0 0.5rem 1.25rem; padding: 0; }
+.bot-msg li { margin-bottom: 0.2rem; }
+.bot-msg strong { font-weight: 700; color: #1e293b; }
+.bot-msg code { background: #f1f5f9; padding: 0.1rem 0.35rem; border-radius: 4px; font-size: 0.82rem; }
+.bot-msg h1, .bot-msg h2, .bot-msg h3 { font-size: 0.95rem; font-weight: 700; margin: 0.5rem 0 0.25rem; }

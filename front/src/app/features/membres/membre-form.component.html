@@ -1,0 +1,53 @@
+<p-toast />
+
+<div class="page-hero">
+  <div style="max-width:700px; margin:0 auto;">
+    <a routerLink="/membres" style="display:inline-flex; align-items:center; gap:0.4rem; color:rgba(255,255,255,0.7); font-size:0.8rem; text-decoration:none; margin-bottom:1.25rem;">
+      <i class="pi pi-arrow-left"></i> Retour aux membres
+    </a>
+    <h1 style="color:white; font-size:1.5rem; font-weight:700; margin:0;">
+      {{ isEdit() ? 'Modifier le membre' : 'Nouveau membre' }}
+    </h1>
+  </div>
+</div>
+
+<div class="page-content narrow">
+  <div class="card">
+    <div class="card-header">
+      <h2 style="font-size:0.95rem; font-weight:600; color:#1e293b; margin:0;">Informations du membre</h2>
+    </div>
+    <form (ngSubmit)="sauvegarder()" class="card-body" style="display:flex; flex-direction:column; gap:1.25rem;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.25rem;">
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Prénom *</label>
+          <input pInputText [(ngModel)]="membre.prenom" name="prenom" required placeholder="Prénom" class="w-full" />
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Nom *</label>
+          <input pInputText [(ngModel)]="membre.nom" name="nom" required placeholder="Nom de famille" class="w-full" />
+        </div>
+        <div style="grid-column:1/-1; display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Email *</label>
+          <input pInputText [(ngModel)]="membre.email" name="email" type="email" required placeholder="email@ecole.sn" class="w-full" />
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Rôle *</label>
+          <p-select [(ngModel)]="membre.role" name="role" [options]="roles" class="w-full" />
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0.4rem;">
+          <label style="font-size:0.8rem; font-weight:600; color:#374151;">Quota de livres</label>
+          <p-inputnumber [(ngModel)]="membre.quota" name="quota" [min]="1" [max]="10" [showButtons]="true" class="w-full" />
+        </div>
+      </div>
+      <div style="display:flex; gap:0.75rem; padding-top:1rem; border-top:1px solid #f1f5f9;">
+        <div style="flex:1;">
+          <p-button type="submit" [label]="isEdit() ? 'Enregistrer' : 'Créer le membre'"
+                    icon="pi pi-save" [loading]="saving()" styleClass="w-full" />
+        </div>
+        <a routerLink="/membres" style="text-decoration:none;">
+          <p-button label="Annuler" severity="secondary" icon="pi pi-times" />
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

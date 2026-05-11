@@ -1,0 +1,56 @@
+<p-toast />
+
+<div class="page-hero">
+  <div style="max-width:620px; margin:0 auto;">
+    <a routerLink="/emprunts" style="display:inline-flex; align-items:center; gap:0.4rem; color:rgba(255,255,255,0.7); font-size:0.8rem; text-decoration:none; margin-bottom:1.25rem;">
+      <i class="pi pi-arrow-left"></i> Retour aux emprunts
+    </a>
+    <h1 style="color:white; font-size:1.5rem; font-weight:700; margin:0;">Nouvel emprunt</h1>
+  </div>
+</div>
+
+<div class="page-content narrow" style="max-width:620px;">
+  <div class="card">
+    <div class="card-header">
+      <h2 style="font-size:0.95rem; font-weight:600; color:#1e293b; margin:0;">Sélectionner le membre et le livre</h2>
+    </div>
+    <form (ngSubmit)="sauvegarder()" class="card-body" style="display:flex; flex-direction:column; gap:1.25rem;">
+
+      <div style="display:flex; flex-direction:column; gap:0.4rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:#374151;">Membre *</label>
+        <p-select [(ngModel)]="membreId" name="membreId" [options]="membres()"
+                  optionLabel="label" optionValue="value"
+                  placeholder="Choisir un membre..." [filter]="true" class="w-full" />
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:0.4rem;">
+        <label style="font-size:0.8rem; font-weight:600; color:#374151;">Livre *</label>
+        <p-select [(ngModel)]="livreId" name="livreId" [options]="livres()"
+                  optionLabel="label" optionValue="value"
+                  placeholder="Choisir un livre disponible..." [filter]="true" class="w-full" />
+        @if (livres().length === 0) {
+          <span style="color:#f59e0b; font-size:0.78rem; display:flex; align-items:center; gap:0.3rem;">
+            <i class="pi pi-exclamation-triangle"></i> Aucun livre disponible actuellement
+          </span>
+        }
+      </div>
+
+      <div style="background:#faf5ff; border-left:4px solid #7c3aed; border-radius:0 0.5rem 0.5rem 0; padding:0.875rem 1rem;">
+        <p style="margin:0; font-size:0.8rem; color:#64748b;">
+          <i class="pi pi-info-circle" style="color:#7c3aed; margin-right:0.4rem;"></i>
+          Durée d'emprunt : <strong>14 jours</strong>. Un email de confirmation est envoyé automatiquement.
+        </p>
+      </div>
+
+      <div style="display:flex; gap:0.75rem; padding-top:1rem; border-top:1px solid #f1f5f9;">
+        <div style="flex:1;">
+          <p-button type="submit" label="Créer l'emprunt" icon="pi pi-bookmark"
+                    [loading]="saving()" [disabled]="!membreId || !livreId" styleClass="w-full" />
+        </div>
+        <a routerLink="/emprunts" style="text-decoration:none;">
+          <p-button label="Annuler" severity="secondary" icon="pi pi-times" />
+        </a>
+      </div>
+    </form>
+  </div>
+</div>

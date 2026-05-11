@@ -1,0 +1,73 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="page-hero">
+  <div style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <h1 style="color:white; font-size:1.4rem; font-weight:700; margin:0;">Emprunts</h1>
+      <div style="display:flex; gap:1.25rem; margin-top:0.25rem;">
+        <span style="color:rgba(255,255,255,0.7); font-size:0.78rem;">
+          <strong style="color:white;">{{ enCours() }}</strong> en cours
+        </span>
+        <span style="color:rgba(255,255,255,0.7); font-size:0.78rem;">
+          <strong style="color:#fca5a5;">{{ enRetard() }}</strong> en retard
+        </span>
+      </div>
+    </div>
+    <a routerLink="/emprunts/new" style="text-decoration:none;">
+      <p-button label="Nouvel emprunt" icon="pi pi-plus" [rounded]="true" severity="contrast" />
+    </a>
+  </div>
+</div>
+
+<div class="page-content">
+  <div class="card">
+    <div class="card-header">
+      <h2 style="font-size:0.95rem; font-weight:600; color:#1e293b; margin:0;">Liste des emprunts</h2>
+    </div>
+    <p-table [value]="emprunts()" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-sm p-datatable-striped"
+             sortField="dateEmprunt" [sortOrder]="-1">
+      <ng-template pTemplate="header">
+        <tr class="table-header">
+          <th>Membre</th>
+          <th>Livre</th>
+          <th pSortableColumn="dateEmprunt">Date emprunt <p-sortIcon field="dateEmprunt" /></th>
+          <th pSortableColumn="dateRetourPrevue">Retour prévu <p-sortIcon field="dateRetourPrevue" /></th>
+          <th>Statut</th>
+          <th style="text-align:right;">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-e>
+        <tr class="table-row">
+          <td style="font-weight:600; color:#1e293b; font-size:0.875rem;">
+            {{ e.membre ? e.membre.prenom + ' ' + e.membre.nom : 'Membre #' + e.membreId }}
+          </td>
+          <td style="color:#475569; font-size:0.875rem;">{{ e.livre?.titre || 'Livre #' + e.livreId }}</td>
+          <td style="color:#64748b; font-size:0.875rem;">{{ e.dateEmprunt }}</td>
+          <td style="font-size:0.875rem;" [style.color]="e.statut === 'EN_RETARD' ? '#dc2626' : '#64748b'">
+            {{ e.dateRetourPrevue }}
+          </td>
+          <td>
+            <p-tag [value]="e.statut === 'EN_COURS' ? 'En cours' : e.statut === 'EN_RETARD' ? 'En retard' : 'Retourné'"
+                   [severity]="statutSeverity(e.statut)" />
+          </td>
+          <td style="text-align:right;">
+            @if (e.statut === 'EN_COURS' || e.statut === 'EN_RETARD') {
+              <p-button label="Retour" icon="pi pi-undo" size="small" [outlined]="true"
+                        severity="secondary" (onClick)="confirmerRetour(e)" />
+            }
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" style="padding:3rem; text-align:center; color:#94a3b8;">
+            <i class="pi pi-bookmark" style="font-size:2.5rem; display:block; margin-bottom:0.75rem;"></i>
+            Aucun emprunt trouvé
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

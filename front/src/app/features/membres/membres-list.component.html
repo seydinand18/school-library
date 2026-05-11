@@ -1,0 +1,81 @@
+<p-toast />
+<p-confirmdialog />
+
+<div class="page-hero">
+  <div style="max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between;">
+    <div>
+      <h1 style="color:white; font-size:1.4rem; font-weight:700; margin:0;">Membres</h1>
+      <p style="color:rgba(255,255,255,0.65); margin:0.2rem 0 0; font-size:0.8rem;">{{ membresFiltres().length }} membre(s)</p>
+    </div>
+    <a routerLink="/membres/new" style="text-decoration:none;">
+      <p-button label="Ajouter un membre" icon="pi pi-user-plus" [rounded]="true" severity="contrast" />
+    </a>
+  </div>
+</div>
+
+<div class="page-content">
+  <div class="card">
+    <div style="padding:1rem 1.5rem; border-bottom:1px solid #f1f5f9; display:flex; align-items:center; gap:0.75rem;">
+      <i class="pi pi-search" style="color:#94a3b8;"></i>
+      <input pInputText [(ngModel)]="recherche" placeholder="Rechercher un membre..."
+        (input)="filtrer()"
+        style="border:none; outline:none; flex:1; font-size:0.875rem; background:transparent;" />
+      @if (recherche) {
+        <p-button icon="pi pi-times" [text]="true" [rounded]="true" severity="secondary" size="small"
+          (onClick)="recherche=''; filtrer()" />
+      }
+    </div>
+
+    <p-table [value]="membresFiltres()" [paginator]="true" [rows]="10"
+             styleClass="p-datatable-sm p-datatable-striped">
+      <ng-template pTemplate="header">
+        <tr class="table-header">
+          <th pSortableColumn="nom">Membre <p-sortIcon field="nom" /></th>
+          <th>Email</th>
+          <th>Rôle</th>
+          <th>Quota</th>
+          <th style="text-align:right;">Actions</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-m>
+        <tr class="table-row">
+          <td>
+            <div style="display:flex; align-items:center; gap:0.75rem;">
+              <p-avatar [label]="avatarLabel(m)" shape="circle" size="normal"
+                        style="background:#3b82f6; color:white; font-weight:700; font-size:0.8rem;" />
+              <div>
+                <div style="font-weight:600; color:#1e293b; font-size:0.875rem;">{{ m.prenom }} {{ m.nom }}</div>
+                <div style="color:#94a3b8; font-size:0.72rem;">Inscrit le {{ m.dateInscription }}</div>
+              </div>
+            </div>
+          </td>
+          <td style="color:#64748b; font-size:0.875rem;">{{ m.email }}</td>
+          <td>
+            <p-tag [value]="m.role" [severity]="roleSeverity(m.role)" />
+          </td>
+          <td style="color:#64748b; font-size:0.875rem;">{{ m.quota }} livre(s)</td>
+          <td style="text-align:right;">
+            <div style="display:flex; justify-content:flex-end; gap:0.25rem;">
+              <a [routerLink]="['/membres', m.id]">
+                <p-button icon="pi pi-eye" [text]="true" [rounded]="true" severity="info" size="small" />
+              </a>
+              <a [routerLink]="['/membres', m.id, 'edit']">
+                <p-button icon="pi pi-pencil" [text]="true" [rounded]="true" severity="secondary" size="small" />
+              </a>
+              <p-button icon="pi pi-trash" [text]="true" [rounded]="true" severity="danger" size="small"
+                        (onClick)="confirmerSuppression(m)" />
+            </div>
+          </td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="5" style="padding:3rem; text-align:center; color:#94a3b8;">
+            <i class="pi pi-users" style="font-size:2.5rem; display:block; margin-bottom:0.75rem;"></i>
+            Aucun membre trouvé
+          </td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

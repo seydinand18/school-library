@@ -1,0 +1,13 @@
+{
+  "/api": {
+    "target": "http://localhost:8080",
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/api/livres":   "/livres-svc/livres",
+      "^/api/membres":  "/membres-svc/membres",
+      "^/api/emprunts": "/emprunts-svc/emprunts",
+      "^/api/chat":     "/chatbot-svc/chat",
+      "^/api/stats":    "/rapports-svc/stats"
+    }
+  }
+}
