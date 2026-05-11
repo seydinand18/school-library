@@ -1,0 +1,42 @@
+spring:
+  application:
+    name: chatbot-svc
+  cloud:
+    config:
+      enabled: false
+  ai:
+#    ollama:
+#      base-url: http://localhost:11434
+#      chat:
+#        options:
+#          model: llama3.1:8b
+
+    openai:
+      api-key: ${OPENAI_API_KEY}
+      chat:
+        options:
+          model: gpt-4o-mini
+
+    mcp:
+      client:
+        sse:
+          connections:
+            livres-mcp:
+              url: http://localhost:8082
+            emprunts-mcp:
+              url: http://localhost:8083
+            membres-mcp:
+              url: http://localhost:8081
+
+telegram:
+  token: ${TELEGRAM_TOKEN}
+
+server:
+  port: 8087
+
+eureka:
+  client:
+    jersey:
+      enabled: false
+    service-url:
+      defaultZone: http://localhost:8761/eureka
