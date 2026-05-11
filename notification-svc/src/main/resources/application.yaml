@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: notification-svc
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dieuwrigne.dev@gmail.com
+    password: xgdyvnkxknizycsq
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+server:
+  port: 8084
