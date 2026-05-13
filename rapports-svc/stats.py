@@ -11,11 +11,12 @@ async def fetch(url: str):
 async def stats_livres():
     livres = await fetch(f"{GATEWAY}/livres-svc/livres")
     total = len(livres)
-    disponibles = sum(1 for l in livres if l.get("quantiteDisponible", 0) > 0)
+    disponibles = sum(l.get("quantiteDisponible", 0) for l in livres)
+    empruntes = sum(l.get("quantiteTotale", 0) - l.get("quantiteDisponible", 0) for l in livres)
     return {
         "total": total,
         "disponibles": disponibles,
-        "empruntes": total - disponibles
+        "empruntes": empruntes
     }
 
 async def stats_membres():
