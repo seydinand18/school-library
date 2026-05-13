@@ -1,75 +1,29 @@
-### ======================
-### MEMBRES
-### ======================
+### ==============================================================
+### BIBLIOTHÈQUE SCOLAIRE — Requêtes HTTP via Gateway (port 8080)
+### Toutes les requêtes passent par la gateway Spring Cloud
+### ==============================================================
 
-### Liste tous les membres
-GET http://localhost:8080/membres
-Accept: application/json
+@gateway = http://localhost:8080
 
-###
 
-### Détail d'un membre
-GET http://localhost:8080/membres/1
-Accept: application/json
-
-###
-
-### Créer un membre
-POST http://localhost:8080/membres
-Content-Type: application/json
-
-{
-  "nom": "Sarr",
-  "prenom": "Cheikh",
-  "email": "cheikh.sarr@ecole.sn",
-  "role": "ELEVE",
-  "quota": 3
-}
-
-###
-
-### Modifier un membre
-PUT http://localhost:8080/membres/1
-Content-Type: application/json
-
-{
-  "nom": "Diallo",
-  "prenom": "Mamadou",
-  "email": "mamadou.diallo@ecole.sn",
-  "role": "ELEVE",
-  "quota": 5
-}
-
-###
-
-### Supprimer un membre
-DELETE http://localhost:8080/membres/6
-
-###
-
-### Emprunts d'un membre (Feign → emprunts-svc)
-GET http://localhost:8080/membres/1/emprunts
-
-###
-
-### ======================
+### ==============================================================
 ### LIVRES
-### ======================
+### ==============================================================
 
 ### Liste tous les livres
-GET http://localhost:8080/livres
+GET {{gateway}}/livres-svc/livres
 Accept: application/json
 
 ###
 
 ### Détail d'un livre
-GET http://localhost:8080/livres/1
+GET {{gateway}}/livres-svc/livres/1
 Accept: application/json
 
 ###
 
 ### Créer un livre
-POST http://localhost:8080/livres
+POST {{gateway}}/livres-svc/livres
 Content-Type: application/json
 
 {
@@ -84,8 +38,8 @@ Content-Type: application/json
 
 ###
 
-### Modifier un livre
-PUT http://localhost:8080/livres/1
+### Créer un autre livre
+POST {{gateway}}/livres-svc/livres
 Content-Type: application/json
 
 {
@@ -94,51 +48,138 @@ Content-Type: application/json
   "isbn": "978-2-07-036822-8",
   "genre": "Roman",
   "classeScolaire": "Terminale",
-  "quantiteTotale": 3,
-  "quantiteDisponible": 2
+  "quantiteTotale": 5,
+  "quantiteDisponible": 5
+}
+
+###
+
+### Modifier un livre
+PUT {{gateway}}/livres-svc/livres/1
+Content-Type: application/json
+
+{
+  "titre": "Les Bouts de bois de Dieu",
+  "auteur": "Ousmane Sembène",
+  "isbn": "978-2-07-036900-3",
+  "genre": "Roman",
+  "classeScolaire": "Terminale",
+  "quantiteTotale": 5,
+  "quantiteDisponible": 5
 }
 
 ###
 
 ### Supprimer un livre
-DELETE http://localhost:8080/livres/4
+DELETE {{gateway}}/livres-svc/livres/4
 
 ###
 
 ### Emprunter un livre (décrémente quantiteDisponible)
-PUT http://localhost:8080/livres/1/emprunter
+PUT {{gateway}}/livres-svc/livres/1/emprunter
 
 ###
 
 ### Retourner un livre (incrémente quantiteDisponible)
-PUT http://localhost:8080/livres/1/retourner
+PUT {{gateway}}/livres-svc/livres/1/retourner
 
 ###
 
-### ======================
+
+### ==============================================================
+### MEMBRES
+### ==============================================================
+
+### Liste tous les membres
+GET {{gateway}}/membres-svc/membres
+Accept: application/json
+
+###
+
+### Détail d'un membre
+GET {{gateway}}/membres-svc/membres/1
+Accept: application/json
+
+###
+
+### Créer un élève
+POST {{gateway}}/membres-svc/membres
+Content-Type: application/json
+
+{
+  "nom": "Sarr",
+  "prenom": "Cheikh",
+  "email": "cheikh.sarr@ecole.sn",
+  "role": "ELEVE",
+  "quota": 3
+}
+
+###
+
+### Créer un professeur
+POST {{gateway}}/membres-svc/membres
+Content-Type: application/json
+
+{
+  "nom": "Diallo",
+  "prenom": "Aminata",
+  "email": "aminata.diallo@ecole.sn",
+  "role": "PROFESSEUR",
+  "quota": 10
+}
+
+###
+
+### Modifier un membre
+PUT {{gateway}}/membres-svc/membres/1
+Content-Type: application/json
+
+{
+  "nom": "Sarr",
+  "prenom": "Cheikh",
+  "email": "cheikh.sarr@ecole.sn",
+  "role": "ELEVE",
+  "quota": 5
+}
+
+###
+
+### Supprimer un membre
+DELETE {{gateway}}/membres-svc/membres/6
+
+###
+
+### Emprunts d'un membre (appel Feign → emprunts-svc)
+GET {{gateway}}/membres-svc/membres/1/emprunts
+
+###
+
+
+### ==============================================================
 ### EMPRUNTS
-### ======================
+### ==============================================================
 
 ### Liste tous les emprunts
-GET http://localhost:8080/emprunts
+GET {{gateway}}/emprunts-svc/emprunts
 Accept: application/json
 
 ###
 
 ### Détail d'un emprunt
-GET http://localhost:8080/emprunts/1
+GET {{gateway}}/emprunts-svc/emprunts/1
 Accept: application/json
 
 ###
 
 ### Emprunts d'un membre
-GET http://localhost:8080/emprunts/membre/1
+GET {{gateway}}/emprunts-svc/emprunts/membre/1
 Accept: application/json
 
 ###
 
-### Créer un emprunt (teste le Feign vers membres-svc et livres-svc)
-POST http://localhost:8080/emprunts
+### Créer un emprunt
+### Déclenche : Feign → membres-svc + livres-svc, puis RabbitMQ → notification-svc
+POST {{gateway}}/emprunts-svc/emprunts
 Content-Type: application/json
 
 {
@@ -148,5 +189,66 @@ Content-Type: application/json
 
 ###
 
-### Retourner un livre (teste le Feign vers livres-svc)
-PATCH http://localhost:8080/emprunts/1/retour
+### Retourner un livre
+### Déclenche : Feign → livres-svc (incrémente quantiteDisponible)
+PATCH {{gateway}}/emprunts-svc/emprunts/1/retour
+
+###
+
+
+### ==============================================================
+### RAPPORTS (Python / FastAPI)
+### ==============================================================
+
+### Dashboard global — livres + membres + emprunts
+GET {{gateway}}/rapports-svc/stats
+Accept: application/json
+
+###
+
+### Stats livres uniquement
+GET {{gateway}}/rapports-svc/stats/livres
+Accept: application/json
+
+###
+
+### Stats membres uniquement
+GET {{gateway}}/rapports-svc/stats/membres
+Accept: application/json
+
+###
+
+### Stats emprunts uniquement
+GET {{gateway}}/rapports-svc/stats/emprunts
+Accept: application/json
+
+###
+
+
+### ==============================================================
+### CHATBOT (Spring AI + MCP)
+### ==============================================================
+
+### Envoyer un message à l'agent IA (streaming SSE)
+POST {{gateway}}/chatbot-svc/chat
+Content-Type: text/plain
+
+Quels livres sont disponibles ?
+
+###
+
+### Autre question
+POST {{gateway}}/chatbot-svc/chat
+Content-Type: text/plain
+
+Quels emprunts sont en retard ?
+
+###
+
+### Autre question
+POST {{gateway}}/chatbot-svc/chat
+Content-Type: text/plain
+
+Combien de membres sont inscrits ?
+
+###
